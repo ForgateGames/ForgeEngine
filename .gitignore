@@ -405,19 +405,14 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-/[Ll]ibrary/
-/[Tt]emp/
 */[Tt]emp/
-/[Oo]bj/
 */[Oo]bj/
-/ForgateEngine/obj/
-ForgateEngine/obj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
-/Library/*
-/.utmp/
+*/[Bb]uild/
+*/[Bb]uilds/
+*/[Ll]ogs/
+*/[Uu]ser[Ss]ettings/
+*/[Ll]ibrary/
+*/.utmp/
 
 /[Mm]emoryCaptures/
 
