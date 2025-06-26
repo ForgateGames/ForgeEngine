@@ -407,6 +407,7 @@ FodyWeavers.xsd
 
 /[Ll]ibrary/
 /[Tt]emp/
+*/[Tt]emp/
 /[Oo]bj/
 */[Oo]bj/
 /ForgateEngine/obj/
