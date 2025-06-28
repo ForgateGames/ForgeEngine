@@ -61,8 +61,6 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.41f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Reach - Complete Sci-Fi UI\Editor\Scripts\InitReachUI.cs" />
-    <Compile Include="Assets\Reach - Complete Sci-Fi UI\Editor\Scripts\ToolsMenu.cs" />
     <Compile Include="Assets\Modern UI Pack\Editor\Scripts\InitMUIP.cs" />
     <Compile Include="Assets\Modern UI Pack\Editor\Scripts\ContextMenu.cs" />
   </ItemGroup>

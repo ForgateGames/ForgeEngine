@@ -11,6 +11,7 @@ namespace Michsky.MUIP
 
         [Header("Settings")]
         public bool topOnDrag = true;
+        public bool isDraggable = true;
 
         private Vector2 originalLocalPointerPosition;
         private Vector3 originalPanelLocalPosition;
@@ -66,15 +67,18 @@ namespace Michsky.MUIP
 
         public void OnDrag(PointerEventData data)
         {
-            Vector2 localPointerPosition;
-
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(DragAreaInternal, data.position, data.pressEventCamera, out localPointerPosition))
+            if (isDraggable)
             {
-                Vector3 offsetToOriginal = localPointerPosition - originalLocalPointerPosition;
-                DragObjectInternal.localPosition = originalPanelLocalPosition + offsetToOriginal;
-            }
+                Vector2 localPointerPosition;
 
-            ClampToArea();
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(DragAreaInternal, data.position, data.pressEventCamera, out localPointerPosition))
+                {
+                    Vector3 offsetToOriginal = localPointerPosition - originalLocalPointerPosition;
+                    DragObjectInternal.localPosition = originalPanelLocalPosition + offsetToOriginal;
+                }
+
+                ClampToArea();
+            }
         }
 
         private void ClampToArea()

@@ -18,6 +18,7 @@ public class HierarchyManager : MonoBehaviour
 
     [SerializeField]
     public GameObject HierarchyList;
+    
     public void OpenProject()
     {
         //using (FolderBrowserDialog dialog = new FolderBrowserDialog())
@@ -32,38 +33,38 @@ public class HierarchyManager : MonoBehaviour
         //    }
         //}
         //string projectPath = EditorUtility.OpenFolderPanel("Selecione uma pasta", "", "");
-        var projectPath = EditorUtility.OpenFilePanel("Selecione um arquivo", "", "cs");
+        var projectPath = EditorUtility.OpenFilePanel("Select a Program.cs", "", "cs");
         if (!string.IsNullOrEmpty(projectPath))
         {
             var fileName = Path.GetFileName(projectPath);
 
             if (fileName == "Program.cs")
             {
-                EngineManager.ProjectDirectory = Path.GetDirectoryName(projectPath);
+                EngineManager.ProjectFolder = Path.GetDirectoryName(projectPath);
 
-                var files = Directory.GetFiles(EngineManager.ProjectDirectory);
+                var files = Directory.GetFiles(EngineManager.ProjectFolder);
 
-                var directories = Directory.GetDirectories(EngineManager.ProjectDirectory);
+                var directories = Directory.GetDirectories(EngineManager.ProjectFolder);
 
-                ConsoleManager.OutputDataReceived.Enqueue("Loading project...");
+                ConsoleManager.SendMsg("Loading project...");
 
                 foreach (var dir in directories)
                 {
                     var directoryPath = Path.GetDirectoryName(dir + "\\");
                     var name = Path.GetFileName(directoryPath);
-                    CreateHierarchyItem(name);
+                    CreateHierarchyItem(name, HierarchyType.Directory);
                 }
 
                 foreach (var file in files)
                 {
                     var name = Path.GetFileName(file);
-                    CreateHierarchyItem(name);
+                    CreateHierarchyItem(name, HierarchyType.File);
                 }
 
                 EngineManager.IsProjectLoaded = true;
                 OpenProjectButton.Interactable(false);
                 ProjectLoaded?.Invoke();
-                ConsoleManager.OutputDataReceived.Enqueue("Project loaded.");
+                ConsoleManager.SendMsg("Project loaded.");
             }
             else
             {
@@ -71,9 +72,9 @@ public class HierarchyManager : MonoBehaviour
             }
         }
     }
-    void CreateHierarchyItem(string name)
+    void CreateHierarchyItem(string name, HierarchyType type)
     {
         var item = Instantiate(HierarchyItem, transform.position, Quaternion.Euler(1, 1, 0), HierarchyList.transform);
-        item.GetComponent<HierarchyItem>().SetName(name);
+        item.GetComponent<HierarchyItem>().SetName(name, type);
     }
 }

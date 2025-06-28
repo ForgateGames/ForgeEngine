@@ -91,6 +91,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: {fileID: 3581484307353102864}
+  DirectorySprite: {fileID: 21300000, guid: fb111413c0e539e438d6b210bdc63b88, type: 3}
+  FileSprite: {fileID: 21300000, guid: 36ba444b2a409a147ad4b2322fb92d39, type: 3}
+  Icon: {fileID: 5903819677614377291}
 --- !u!1 &4766120827488987111
 GameObject:
   m_ObjectHideFlags: 0
