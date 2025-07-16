@@ -20,7 +20,6 @@ namespace Assets.LoadProject
         public TextMeshProUGUI Folder { get; set; }
 
         public ForgeProject ForgeProject { get; set; }
-
         public UnityEvent<ForgeProject> OnClickPlay { get; set; } = new UnityEvent<ForgeProject>();
 
         public void SetInfo(ForgeProject project)
@@ -29,6 +28,9 @@ namespace Assets.LoadProject
             Name.text = project.Name;
             Folder.text = project.FolderPath;
         }
-
+        public void ClickPlay()
+        {
+            OnClickPlay.Invoke(ForgeProject);
+        }
     }
 }

@@ -13,21 +13,19 @@ using SerializationUtility = Sirenix.Serialization.SerializationUtility;
 [ShowOdinSerializedPropertiesInInspector]
 public class LoadProjectManager : SerializedMonoBehaviour
 {
-    [SerializeField]
+    [OdinSerialize]
     public ButtonManager OpenFromGit;
 
-    [SerializeField]
-    public ButtonManager ChatGpt;
-    [SerializeField]
-    public ButtonManager Claude;
-    [SerializeField]
-    public ButtonManager Gemini;
-    [SerializeField]
-    public ButtonManager Copilot;
-    [SerializeField]
-    public UnityEvent<string> OnFolderSelected;
-    [SerializeField]
-    public UnityEvent OnProjectCreated;
+    [OdinSerialize]
+    public ButtonManager ChatGpt { get; set; }
+    [OdinSerialize]
+    public ButtonManager Claude { get; set; }
+    [OdinSerialize]
+    public ButtonManager Gemini { get; set; }
+    [OdinSerialize]
+    public ButtonManager Copilot { get; set; }
+    [OdinSerialize]
+    public UnityEvent OnProjectValidated { get; set; }
 
     [OdinSerialize]
     public GameObject LastProjectsList { get; set; }
@@ -79,13 +77,25 @@ public class LoadProjectManager : SerializedMonoBehaviour
             SaveLastProjects();
         }
     }
-
-    private void OpenProject(ForgeProject project)
+    private void OpenProject(ForgeProject forgeProject)
     {
-        ProjectName = project.Name;
-        FolderPath = project.FolderPath;
+        ProjectName = forgeProject.Name;
+        FolderPath = forgeProject.FolderPath;
+        OpenProject();
+    }
+    private void OpenProject()
+    {
+        var project = new ForgeProject
+        {
+            Name = ProjectName,
+            FolderPath = FolderPath
+        };
         EngineManager.ProjectFolder = FolderPath;
-        OnProjectCreated?.Invoke();
+
+        //validate project before opening
+
+        //change view
+        OnProjectValidated?.Invoke();
     }
 
     private void SaveLastProjects()
@@ -98,22 +108,27 @@ public class LoadProjectManager : SerializedMonoBehaviour
         Debug.Log($"Project saved: {path}");
     }
 
-    public void SaveProjectInternalList()
-    {
-        LastProjects.ProjectsList.Add(new ForgeProject
-        {
-            Name = ProjectName,
-            FolderPath = FolderPath
-        });
-        SaveLastProjects();
-    }
 
     public async void NewProject()
     {
         await ConsoleManager.ExecuteCommand($"dotnet new mgdesktopgl -o {ProjectName}", true);
         ConsoleManager.EnterInFolder(ProjectName);
         await ConsoleManager.ExecuteCommand($"mkdir ForgeEngineScenes", true);
-        OpenProject(new ForgeProject { FolderPath = FolderPath, Name = ProjectName});
+        ConsoleManager.ExitFromFolder();
+        
+        SaveLastProjects();
+        OpenProject();
+    }
+
+    void AddToLastProjectsListIfNotExist(ForgeProject forgeProject)
+    {
+        if (LastProjects.ProjectsList.Exists(p => p.Name == forgeProject.Name && p.FolderPath == forgeProject.FolderPath))
+            return;
+        LastProjects.ProjectsList.Add(forgeProject);
+        SaveLastProjects();
+        var item = Instantiate(LastProjectItem, LastProjectsList.transform);
+        item.GetComponent<LastProjectItem>().SetInfo(forgeProject);
+        item.GetComponent<LastProjectItem>().OnClickPlay.AddListener(OpenProject);
     }
 
     public void SelectFolder()
